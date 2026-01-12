@@ -58,7 +58,7 @@ const ProfileDashboard = () => {
       if (profilepic) data.append("profilepic", profilepic);
 
       const res = await axios.put(
-        "http://localhost:3000/api/auth/update-profile",
+        "https://convo-chat-backend.vercel.app/api/auth/update-profile",
         data,
         { withCredentials: true }
       );

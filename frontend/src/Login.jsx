@@ -43,7 +43,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/login",
+        "https://convo-chat-backend.vercel.app/api/auth/login",
         loginData,
         { withCredentials: true }
       );
@@ -87,7 +87,7 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/auth/register",
+        "https://convo-chat-backend.vercel.app/api/auth/register",
         signupData,
         { withCredentials: true }
       );

@@ -28,7 +28,7 @@ const SideBar = ({ onSelectUser }) => {
       try {
         setLoading(true);
         const res = await axios.get(
-          "http://localhost:3000/api/user/currentchatter",
+          "https://convo-chat-backend.vercel.app/api/user/currentchatter",
           { withCredentials: true }
         );
         setChatUser(res.data || []);
@@ -76,7 +76,7 @@ const SideBar = ({ onSelectUser }) => {
       setLoading(true);
 
       const res = await axios.get(
-        `http://localhost:3000/api/user/search?search=${searchInput}`,
+        `https://convo-chat-backend.vercel.app/api/user/search?search=${searchInput}`,
         { withCredentials: true }
       );
 

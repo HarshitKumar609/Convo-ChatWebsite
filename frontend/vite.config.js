@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://convo-chat-backend.vercel.app/",
         secure: false,
       },
     },
