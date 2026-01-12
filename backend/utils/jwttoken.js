@@ -7,10 +7,10 @@ const jsontoken = (userId, res) => {
 
   // Use a string as cookie name
   res.cookie("jwt", token, {
-    maxAge: 30 * 24 * 60 * 60 * 1000,
     httpOnly: true,
-    sameSite: "lax", // 👈 IMPORTANT
-    secure: false, // 👈 IMPORTANT for localhost
+    secure: true, // REQUIRED on HTTPS
+    sameSite: "None", // REQUIRED for cross-site
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };
 
