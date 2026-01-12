@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* ======= BASE BACKGROUND ======= */
+body {
+    min-height: 100vh;
+    background: #606c88;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, #3f4c6b, #0f172b);
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #374056, #121c34);
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    color: white;
+}
+
+.sideBar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+.sideBar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
