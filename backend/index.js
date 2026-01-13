@@ -41,9 +41,11 @@ const startServer = async () => {
     await connectTODatabae();
     console.log("✅ Database connected");
 
-    server.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
+    if (process.env.NODE_ENV !== "production") {
+      server.listen(PORT, () => {
+        console.log(`🚀 Server running on port ${PORT}`);
+      });
+    }
   } catch (error) {
     console.error("❌ Database connection failed:", error.message);
     process.exit(1);
