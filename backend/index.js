@@ -6,14 +6,17 @@ import messageRouter from "./Route/messageroute.js";
 import userRoute from "./Route/userRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app, server } from "./Soket/Soket.js";
+import { app, server } from "./Soket/socket.js";
 
-dotenv.config();
+// Load env only locally
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
+}
 
-const PORT = process.env.PORT || 3000;
+// Connect DB (important: no await wrapper)
+connectTODatabae();
 
 // ================= MIDDLEWARES =================
-
 app.use(express.json());
 
 app.use(
@@ -35,21 +38,4 @@ app.get("/", (req, res) => {
   res.status(200).send("Chat App Backend Running 🚀");
 });
 
-// ================= START SERVER =================
-const startServer = async () => {
-  try {
-    await connectTODatabae();
-    console.log("✅ Database connected");
-
-    if (process.env.NODE_ENV !== "production") {
-      server.listen(PORT, () => {
-        console.log(`🚀 Server running on port ${PORT}`);
-      });
-    }
-  } catch (error) {
-    console.error("❌ Database connection failed:", error.message);
-    process.exit(1);
-  }
-};
-
-startServer();
+export default server;
