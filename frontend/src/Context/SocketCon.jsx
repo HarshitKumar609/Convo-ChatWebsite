@@ -15,7 +15,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      const socket = io("https://convo-chat-backend.vercel.app", {
+      const socket = io("http://localhost:3000", {
         withCredentials: true,
         transports: ["websocket"],
         query: { userId: authUser?._id },

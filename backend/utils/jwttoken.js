@@ -5,10 +5,11 @@ const jsontoken = (userId, res) => {
     expiresIn: "30d",
   });
 
+  // Use a string as cookie name
   res.cookie("jwt", token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    secure: true, // REQUIRED on HTTPS
+    sameSite: "None", // REQUIRED for cross-site
     maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 };

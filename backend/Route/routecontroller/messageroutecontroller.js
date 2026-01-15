@@ -6,7 +6,7 @@ import { getReceiverSocketIds, io } from "../../Soket/Soket.js";
 export const sendMessage = async (req, res) => {
   try {
     const { message } = req.body;
-    const { id: receiverId } = req.params; // ✅ use lowercase receiverId
+    const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
     // Find existing conversation
@@ -24,7 +24,7 @@ export const sendMessage = async (req, res) => {
     // Create new message
     const newMessage = await Message.create({
       senderId,
-      ReceiverId: receiverId, // ✅ matches your schema
+      ReceiverId: receiverId,
       message,
       conversationId: conversation._id,
     });

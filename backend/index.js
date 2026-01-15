@@ -6,22 +6,19 @@ import messageRouter from "./Route/messageroute.js";
 import userRoute from "./Route/userRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { app, server } from "./Soket/socket.js";
+import { app, server } from "./Soket/Soket.js";
 
-// Load env only locally
-if (process.env.NODE_ENV !== "production") {
-  dotenv.config();
-}
+dotenv.config();
 
-// Connect DB (important: no await wrapper)
-connectTODatabae();
+const PORT = process.env.PORT || 3000;
 
 // ================= MIDDLEWARES =================
+
 app.use(express.json());
 
 app.use(
   cors({
-    origin: "https://convo-wheat.vercel.app",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );
@@ -38,4 +35,19 @@ app.get("/", (req, res) => {
   res.status(200).send("Chat App Backend Running 🚀");
 });
 
-export default server;
+// ================= START SERVER =================
+const startServer = async () => {
+  try {
+    await connectTODatabae();
+    console.log("✅ Database connected");
+
+    server.listen(PORT, () => {
+      console.log(` Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Database connection failed:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();

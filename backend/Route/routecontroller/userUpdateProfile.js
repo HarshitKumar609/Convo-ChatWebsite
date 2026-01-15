@@ -4,7 +4,7 @@ import { uploadOnCloudinary } from "../../utils/Cloudinary.js";
 
 export const updateUserProfile = async (req, res) => {
   try {
-    const userId = req.user._id; // coming from auth middleware
+    const userId = req.user._id;
 
     const { fullname, username, email, gender, password } = req.body;
 

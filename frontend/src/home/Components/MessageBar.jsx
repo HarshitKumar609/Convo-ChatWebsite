@@ -51,7 +51,7 @@ const MessageBar = ({ onBackUser }) => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `https://convo-chat-backend.vercel.app/api/message/${selectedConversation._id}`,
+          `http://localhost:3000/api/message/${selectedConversation._id}`,
           { withCredentials: true }
         );
         setMessages(res.data);
@@ -78,7 +78,7 @@ const MessageBar = ({ onBackUser }) => {
     setSending(true);
     try {
       const res = await axios.post(
-        `https://convo-chat-backend.vercel.app/api/message/send/${selectedConversation._id}`,
+        `http://localhost:3000/api/message/send/${selectedConversation._id}`,
         { message: sendData },
         { withCredentials: true }
       );

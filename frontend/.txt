@@ -19,7 +19,6 @@ const SideBar = ({ onSelectUser }) => {
   const [chatUser, setChatUser] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [onlineUsers, setOnlineUsers] = useState([]);
 
   const [unreadCounts, setUnreadCounts] = useState({});
 
@@ -46,12 +45,8 @@ const SideBar = ({ onSelectUser }) => {
   /* ================= SOCKET (UNREAD LOGIC) ================= */
   useEffect(() => {
     if (!socket || !authUser?._id) return;
-    const handleNewMessage = (data) => {
-      // backend may send message directly OR inside { message }
-      const message = data?.message || data;
 
-      if (!message?.senderId) return;
-
+    const handleNewMessage = ({ message }) => {
       // ignore own messages
       if (message.senderId === authUser._id) return;
 
@@ -111,25 +106,7 @@ const SideBar = ({ onSelectUser }) => {
     });
   };
 
-  const usersToShow = (searchUser.length ? searchUser : chatUser).filter(
-    (user) => user && user._id
-  );
-
-  // --------------for online users------------------
-  useEffect(() => {
-    if (!socket) return;
-
-    const handleOnlineUsers = (users) => {
-      // users = array of userIds
-      setOnlineUsers(users);
-    };
-
-    socket.on("getOnlineUsers", handleOnlineUsers);
-
-    return () => {
-      socket.off("getOnlineUsers", handleOnlineUsers);
-    };
-  }, [socket]);
+  const usersToShow = searchUser.length ? searchUser : chatUser;
 
   return (
     <div className="h-full w-full flex flex-col px-3 py-4 gap-4 bg-white/5">
@@ -156,7 +133,7 @@ const SideBar = ({ onSelectUser }) => {
           </button>
         </form>
 
-        {/*  PROFILE ICON RESTORED */}
+        {/* ✅ PROFILE ICON RESTORED */}
         <img
           src={authUser?.profilepic || "/avatar.png"}
           alt="profile"
@@ -185,14 +162,10 @@ const SideBar = ({ onSelectUser }) => {
             />
 
             <div className="flex flex-col w-full">
-              <div className="flex items-center gap-2 max-w-40">
-                <p className="font-semibold text-sm truncate">
+              <div className="flex items-center justify-between w-full">
+                <p className="font-semibold text-sm truncate max-w-40">
                   {user.username}
                 </p>
-
-                {onlineUsers.includes(user._id) && (
-                  <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                )}
 
                 {unreadCounts[user._id] > 0 && (
                   <span className="min-w-5.5 h-5 px-1.5 flex items-center justify-center rounded-full bg-green-500 text-white text-[11px] font-bold">
