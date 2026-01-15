@@ -29,7 +29,7 @@ const SideBar = ({ onSelectUser }) => {
       try {
         setLoading(true);
         const res = await axios.get(
-          " https://convo-chatwebsite-backend.onrender/api/user/currentchatter",
+          " https://convo-chatwebsite-backend.onrender.com/api/user/currentchatter",
           { withCredentials: true }
         );
         setChatUser(res.data || []);
