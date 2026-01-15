@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: " https://convo-chatwebsite-backend.onrender",
+        target: "https://convo-chatwebsite-backend.onrender.com",
         secure: false,
       },
     },
