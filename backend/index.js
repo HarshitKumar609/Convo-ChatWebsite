@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://convo-chat-website.vercel.app",
     credentials: true,
   })
 );
