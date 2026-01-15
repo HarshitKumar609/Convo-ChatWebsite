@@ -30,7 +30,7 @@ const MessageBar = ({ onBackUser }) => {
         message.senderId === selectedConversation._id ||
         message.ReceiverId === selectedConversation._id;
 
-      if (!isCurrentChat) return; // ❌ ignore other chats
+      if (!isCurrentChat) return; //  ignore other chats
 
       const sound = new Audio(notify);
       sound.play();
@@ -51,7 +51,7 @@ const MessageBar = ({ onBackUser }) => {
       setLoading(true);
       try {
         const res = await axios.get(
-          `http://localhost:3000/api/message/${selectedConversation._id}`,
+          ` https://convo-chatwebsite-backend.onrender/api/message/${selectedConversation._id}`,
           { withCredentials: true }
         );
         setMessages(res.data);
@@ -78,7 +78,7 @@ const MessageBar = ({ onBackUser }) => {
     setSending(true);
     try {
       const res = await axios.post(
-        `http://localhost:3000/api/message/send/${selectedConversation._id}`,
+        ` https://convo-chatwebsite-backend.onrender/api/message/send/${selectedConversation._id}`,
         { message: sendData },
         { withCredentials: true }
       );

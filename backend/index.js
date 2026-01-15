@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "*",
     credentials: true,
   })
 );
@@ -39,7 +39,7 @@ app.get("/", (req, res) => {
 const startServer = async () => {
   try {
     await connectTODatabae();
-    console.log("✅ Database connected");
+    console.log(" Database connected");
 
     server.listen(PORT, () => {
       console.log(` Server running on port ${PORT}`);
