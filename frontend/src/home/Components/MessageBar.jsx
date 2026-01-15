@@ -51,7 +51,7 @@ const MessageBar = ({ onBackUser }) => {
       setLoading(true);
       try {
         const res = await axios.get(
-          ` https://convo-chatwebsite-backend.onrender/api/message/${selectedConversation._id}`,
+          `https://convo-chatwebsite-backend.onrender.com/api/message/${selectedConversation._id}`,
           { withCredentials: true }
         );
         setMessages(res.data);
@@ -78,7 +78,7 @@ const MessageBar = ({ onBackUser }) => {
     setSending(true);
     try {
       const res = await axios.post(
-        ` https://convo-chatwebsite-backend.onrender/api/message/send/${selectedConversation._id}`,
+        ` https://convo-chatwebsite-backend.onrender.com/api/message/send/${selectedConversation._id}`,
         { message: sendData },
         { withCredentials: true }
       );

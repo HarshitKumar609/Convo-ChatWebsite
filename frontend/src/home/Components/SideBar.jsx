@@ -81,7 +81,7 @@ const SideBar = ({ onSelectUser }) => {
       setLoading(true);
 
       const res = await axios.get(
-        ` https://convo-chatwebsite-backend.onrender/api/user/search?search=${searchInput}`,
+        ` https://convo-chatwebsite-backend.onrender.com/api/user/search?search=${searchInput}`,
         { withCredentials: true }
       );
 

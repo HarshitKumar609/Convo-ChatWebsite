@@ -15,7 +15,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      const socket = io(" https://convo-chatwebsite-backend.onrender", {
+      const socket = io("https://convo-chatwebsite-backend.onrender.com", {
         withCredentials: true,
         transports: ["websocket"],
         query: { userId: authUser?._id },

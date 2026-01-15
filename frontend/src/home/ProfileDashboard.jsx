@@ -58,7 +58,7 @@ const ProfileDashboard = () => {
       if (profilepic) data.append("profilepic", profilepic);
 
       const res = await axios.put(
-        " https://convo-chatwebsite-backend.onrender/api/auth/update-profile",
+        "https://convo-chatwebsite-backend.onrender.com/api/auth/update-profile",
         data,
         { withCredentials: true }
       );
