@@ -30,7 +30,7 @@ const SideBar = ({ onSelectUser }) => {
         setLoading(true);
         const res = await axios.get(
           " https://convo-chatwebsite-backend.onrender.com/api/user/currentchatter",
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setChatUser(res.data || []);
       } catch {
@@ -82,7 +82,7 @@ const SideBar = ({ onSelectUser }) => {
 
       const res = await axios.get(
         ` https://convo-chatwebsite-backend.onrender.com/api/user/search?search=${searchInput}`,
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       setSearchUser(res.data || []);
@@ -112,7 +112,7 @@ const SideBar = ({ onSelectUser }) => {
   };
 
   const usersToShow = (searchUser.length ? searchUser : chatUser).filter(
-    (user) => user && user._id
+    (user) => user && user._id,
   );
 
   // --------------for online users------------------
@@ -132,7 +132,7 @@ const SideBar = ({ onSelectUser }) => {
   }, [socket]);
 
   return (
-    <div className="h-full w-full flex flex-col px-3 py-4 gap-4 bg-white/5">
+    <div className="h-full w-full flex flex-col px-3 py-4 gap-4 bg-white/5 rounded-2xl">
       {/* ================= SEARCH + PROFILE ================= */}
       <div className="flex items-center gap-3">
         <form

@@ -20,7 +20,7 @@ const Homepage = () => {
   };
 
   return (
-    <div className="w-full h-screen p-0 md:px-3 md:py-3 ">
+    <div className="w-full h-[100dvh] p-0 md:px-3 md:py-3 ">
       {/* MAIN GLASS CONTAINER (ONLY BLUR HERE) */}
       <div
         className="

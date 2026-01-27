@@ -52,7 +52,7 @@ const MessageBar = ({ onBackUser }) => {
       try {
         const res = await axios.get(
           `https://convo-chatwebsite-backend.onrender.com/api/message/${selectedConversation._id}`,
-          { withCredentials: true }
+          { withCredentials: true },
         );
         setMessages(res.data);
       } catch (error) {
@@ -80,7 +80,7 @@ const MessageBar = ({ onBackUser }) => {
       const res = await axios.post(
         ` https://convo-chatwebsite-backend.onrender.com/api/message/send/${selectedConversation._id}`,
         { message: sendData },
-        { withCredentials: true }
+        { withCredentials: true },
       );
 
       addMessage(res.data);
@@ -93,7 +93,7 @@ const MessageBar = ({ onBackUser }) => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col text-white">
+    <div className="w-full h-[100dvh] flex flex-col text-white">
       {/* EMPTY STATE */}
       {!selectedConversation ? (
         <div className="flex flex-1 items-center justify-center px-4">
