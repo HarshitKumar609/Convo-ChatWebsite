@@ -10,7 +10,7 @@ import Background from "./home/Components/Background";
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="h-screen flex justify-center items-center">
+      <div className="h-[100dvh] flex justify-center items-center">
         <Background />
         <Routes>
           <Route path="/login" element={<Login />} />
