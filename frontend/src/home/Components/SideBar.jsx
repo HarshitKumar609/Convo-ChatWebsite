@@ -29,7 +29,7 @@ const SideBar = ({ onSelectUser }) => {
       try {
         setLoading(true);
         const res = await axios.get(
-          " https://convo-chatwebsite-backend.onrender.com/api/user/currentchatter",
+          "https://convo-chatwebsite-backend.onrender.com/api/user/currentchatter",
           { withCredentials: true },
         );
         setChatUser(res.data || []);
@@ -81,7 +81,7 @@ const SideBar = ({ onSelectUser }) => {
       setLoading(true);
 
       const res = await axios.get(
-        ` https://convo-chatwebsite-backend.onrender.com/api/user/search?search=${searchInput}`,
+        `https://convo-chatwebsite-backend.onrender.com/api/user/search?search=${searchInput}`,
         { withCredentials: true },
       );
 
@@ -93,9 +93,16 @@ const SideBar = ({ onSelectUser }) => {
     }
   };
   useEffect(() => {
-    if (!searchInput.trim()) {
-      setSearchUser([]);
-    }
+    const delay = setTimeout(() => {
+      if (!searchInput.trim()) {
+        setSearchUser([]);
+        return;
+      }
+
+      handleSearch();
+    }, 300);
+
+    return () => clearTimeout(delay);
   }, [searchInput]);
 
   /* ================= USER CLICK ================= */
@@ -111,7 +118,7 @@ const SideBar = ({ onSelectUser }) => {
     });
   };
 
-  const usersToShow = (searchUser.length ? searchUser : chatUser).filter(
+  const usersToShow = (searchInput.trim() ? searchUser : chatUser).filter(
     (user) => user && user._id,
   );
 
@@ -208,7 +215,9 @@ const SideBar = ({ onSelectUser }) => {
 
         {!loading && usersToShow.length === 0 && (
           <p className="text-center text-white/60 mt-10">
-            Search users to start chatting
+            {searchInput.trim()
+              ? "No users found"
+              : "Search users to start chatting"}
           </p>
         )}
       </div>
