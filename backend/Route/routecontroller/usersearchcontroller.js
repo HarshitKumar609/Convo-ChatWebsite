@@ -6,27 +6,12 @@ export const getuserbysearch = async (req, res) => {
     const search = req.query.search?.trim();
     const currentId = req.user._id;
 
-    // ❗ If empty search → return chat list
     if (!search) {
       return res.status(200).send([]);
     }
 
-    // 1️⃣ Get all conversations of current user
-    const conversations = await Conversation.find({
-      participants: currentId,
-    });
-
-    // 2️⃣ Extract other participants (friends)
-    let friendIds = conversations.flatMap((conv) =>
-      conv.participants.filter((id) => id.toString() !== currentId.toString()),
-    );
-
-    // 3️⃣ Remove duplicates
-    friendIds = [...new Set(friendIds.map((id) => id.toString()))];
-
-    // 4️⃣ Find only those friends + apply search
     const users = await User.find({
-      _id: { $in: friendIds },
+      _id: { $ne: currentId }, // ❗ exclude yourself
       $or: [
         { username: { $regex: search, $options: "i" } },
         { fullname: { $regex: search, $options: "i" } },
@@ -42,7 +27,6 @@ export const getuserbysearch = async (req, res) => {
     });
   }
 };
-
 //currentchatters
 export const getcurrentchatters = async (req, res) => {
   try {

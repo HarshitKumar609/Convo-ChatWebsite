@@ -109,11 +109,6 @@ export const rejectFriendRequest = async (req, res) => {
       return res.status(404).json({ message: "Request not found" });
     }
 
-    // 🔒 Only receiver can reject
-    if (request.receiver.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
     request.status = "rejected";
     await request.save();
 
