@@ -6,6 +6,7 @@ import { ToastContainer } from "react-toastify";
 import { VarifyUser } from "./utils/VarifyUser";
 import ProfileDashboard from "./home/ProfileDashboard";
 import FriendRequests from "./pages/FriendRequests";
+import Background from "./home/Components/Background";
 
 const App = () => {
   return (
