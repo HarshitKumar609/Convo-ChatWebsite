@@ -7,7 +7,7 @@ import userRoute from "./Route/userRoute.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { app, server } from "./Soket/Soket.js";
-
+import friendRequestRoute from "./Route/friendRequestRoute.js";
 dotenv.config();
 
 const PORT = process.env.PORT || 3000;
@@ -20,12 +20,13 @@ app.use(
   cors({
     origin: "https://convo-chat-website.vercel.app",
     credentials: true,
-  })
+  }),
 );
 
 app.use(cookieParser());
 
 // ================= ROUTES =================
+app.use("/api/friend", friendRequestRoute);
 app.use("/api/auth", authRouter);
 app.use("/api/message", messageRouter);
 app.use("/api/user", userRoute);

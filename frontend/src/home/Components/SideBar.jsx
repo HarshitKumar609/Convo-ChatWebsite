@@ -20,8 +20,30 @@ const SideBar = ({ onSelectUser }) => {
   const [loading, setLoading] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
-
   const [unreadCounts, setUnreadCounts] = useState({});
+
+  // 🔥 NEW: track sent requests
+  const [sentRequests, setSentRequests] = useState({});
+
+  /* ================= SEND FRIEND REQUEST ================= */
+  const sendFriendRequest = async (receiverId) => {
+    try {
+      if (sentRequests[receiverId]) return; // prevent duplicate click
+
+      setSentRequests((prev) => ({ ...prev, [receiverId]: true }));
+
+      await axios.post(
+        "https://convo-chatwebsite-backend.onrender.com/api/friend/send",
+        { receiverId },
+        { withCredentials: true },
+      );
+
+      toast.success("Friend request sent");
+    } catch (error) {
+      setSentRequests((prev) => ({ ...prev, [receiverId]: false }));
+      toast.error(error.response?.data?.message || "Request failed");
+    }
+  };
 
   /* ================= FETCH CHAT USERS ================= */
   useEffect(() => {
@@ -43,19 +65,15 @@ const SideBar = ({ onSelectUser }) => {
     fetchChatUsers();
   }, []);
 
-  /* ================= SOCKET (UNREAD LOGIC) ================= */
+  /* ================= SOCKET ================= */
   useEffect(() => {
     if (!socket || !authUser?._id) return;
+
     const handleNewMessage = (data) => {
-      // backend may send message directly OR inside { message }
       const message = data?.message || data;
 
       if (!message?.senderId) return;
-
-      // ignore own messages
       if (message.senderId === authUser._id) return;
-
-      // if chat is open, don't count unread
       if (selectedConversation?._id === message.senderId) return;
 
       setUnreadCounts((prev) => ({
@@ -65,12 +83,10 @@ const SideBar = ({ onSelectUser }) => {
     };
 
     socket.on("newMessage", handleNewMessage);
-
-    return () => {
-      socket.off("newMessage", handleNewMessage);
-    };
+    return () => socket.off("newMessage", handleNewMessage);
   }, [socket, authUser?._id, selectedConversation?._id]);
 
+  /* ================= SEARCH ================= */
   const handleSearch = async () => {
     if (!searchInput.trim()) {
       setSearchUser([]);
@@ -86,19 +102,19 @@ const SideBar = ({ onSelectUser }) => {
       );
 
       setSearchUser(res.data || []);
-    } catch (error) {
+    } catch {
       toast.error("User search failed");
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     const delay = setTimeout(() => {
       if (!searchInput.trim()) {
         setSearchUser([]);
         return;
       }
-
       handleSearch();
     }, 300);
 
@@ -122,25 +138,21 @@ const SideBar = ({ onSelectUser }) => {
     (user) => user && user._id,
   );
 
-  // --------------for online users------------------
+  /* ================= ONLINE USERS ================= */
   useEffect(() => {
     if (!socket) return;
 
     const handleOnlineUsers = (users) => {
-      // users = array of userIds
       setOnlineUsers(users);
     };
 
     socket.on("getOnlineUsers", handleOnlineUsers);
-
-    return () => {
-      socket.off("getOnlineUsers", handleOnlineUsers);
-    };
+    return () => socket.off("getOnlineUsers", handleOnlineUsers);
   }, [socket]);
 
   return (
     <div className="h-full w-full flex flex-col px-3 py-4 gap-4 bg-white/5 rounded-2xl">
-      {/* ================= SEARCH + PROFILE ================= */}
+      {/* SEARCH */}
       <div className="flex items-center gap-3">
         <form
           className="relative flex-1"
@@ -155,60 +167,68 @@ const SideBar = ({ onSelectUser }) => {
             placeholder="Search users..."
             className="w-full h-11 pl-5 pr-14 rounded-full bg-black/30 text-white"
           />
-          <button
-            type="submit"
-            className="absolute right-2 top-2 bg-sky-500 p-2 rounded-full"
-          >
+          <button className="absolute right-2 top-2 bg-sky-500 p-2 rounded-full">
             <IoSearchSharp />
           </button>
         </form>
 
-        {/*  PROFILE ICON RESTORED */}
         <img
           src={authUser?.profilepic || "/avatar.png"}
-          alt="profile"
+          alt=""
           onClick={() => navigate("/dashboard")}
-          className="w-11 h-11 rounded-full object-cover cursor-pointer border border-white/20"
+          className="w-11 h-11 rounded-full cursor-pointer"
         />
       </div>
 
-      {/* ================= USER LIST ================= */}
+      {/* USERS */}
       <div className="flex-1 overflow-y-auto space-y-1">
         {usersToShow.map((user) => (
           <div
             key={user._id}
-            onClick={() => handleUserClick(user)}
-            className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer
-              ${
-                selectedUserId === user._id
-                  ? "bg-sky-500 text-white"
-                  : "hover:bg-white/10 text-white/80"
-              }`}
+            onClick={() => {
+              if (!searchInput.trim()) handleUserClick(user);
+            }}
+            className={`flex items-center gap-4 p-3 rounded-xl cursor-pointer ${
+              selectedUserId === user._id
+                ? "bg-sky-500 text-white"
+                : "hover:bg-white/10 text-white/80"
+            }`}
           >
-            <img
-              src={user.profilepic}
-              className="w-12 h-12 rounded-full object-cover"
-              alt=""
-            />
+            <img src={user.profilepic} className="w-12 h-12 rounded-full" />
 
             <div className="flex flex-col w-full">
-              <div className="flex items-center gap-2 max-w-40">
-                <p className="font-semibold text-sm truncate">
-                  {user.username}
-                </p>
+              <div className="flex items-center gap-2">
+                <p className="font-semibold text-sm">{user.username}</p>
 
                 {onlineUsers.includes(user._id) && (
                   <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 )}
 
                 {unreadCounts[user._id] > 0 && (
-                  <span className="min-w-5.5 h-5 px-1.5 flex items-center justify-center rounded-full bg-green-500 text-white text-[11px] font-bold">
-                    +{unreadCounts[user._id]}
+                  <span className="bg-green-500 text-xs px-2 rounded-full">
+                    {unreadCounts[user._id]}
                   </span>
                 )}
               </div>
 
-              <p className="text-xs text-white/60">Tap to chat</p>
+              {searchInput.trim() ? (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    sendFriendRequest(user._id);
+                  }}
+                  disabled={sentRequests[user._id]}
+                  className={`text-xs px-2 py-1 rounded mt-1 ${
+                    sentRequests[user._id]
+                      ? "bg-gray-500 cursor-not-allowed"
+                      : "bg-sky-500"
+                  }`}
+                >
+                  {sentRequests[user._id] ? "Requested" : "Add Friend"}
+                </button>
+              ) : (
+                <p className="text-xs text-white/60">Tap to chat</p>
+              )}
             </div>
           </div>
         ))}
@@ -222,7 +242,15 @@ const SideBar = ({ onSelectUser }) => {
         )}
       </div>
 
-      {/* ================= LOGOUT ================= */}
+      {/* REQUEST PAGE */}
+      <button
+        onClick={() => navigate("/requests")}
+        className="p-2 bg-yellow-500 rounded text-black"
+      >
+        Friend Requests
+      </button>
+
+      {/* LOGOUT */}
       <button
         onClick={() => {
           localStorage.removeItem("chatapp");

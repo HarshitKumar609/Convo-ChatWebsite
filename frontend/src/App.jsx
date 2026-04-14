@@ -5,7 +5,7 @@ import Login from "./Login";
 import { ToastContainer } from "react-toastify";
 import { VarifyUser } from "./utils/VarifyUser";
 import ProfileDashboard from "./home/ProfileDashboard";
-import Background from "./home/Components/Background";
+import FriendRequests from "./pages/FriendRequests";
 
 const App = () => {
   return (
@@ -17,6 +17,7 @@ const App = () => {
           <Route path="" element={<VarifyUser />}>
             <Route path="/" element={<Homepage />} />
             <Route path="/dashboard" element={<ProfileDashboard />} />
+            <Route path="/requests" element={<FriendRequests />} />
           </Route>
         </Routes>
         <ToastContainer />
